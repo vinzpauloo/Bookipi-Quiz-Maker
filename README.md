@@ -1,6 +1,107 @@
 # Bookipi - Quiz Maker
 
-A full-stack quiz maker application built with modern web technologies.
+A full-stack quiz maker application built with modern web technologies. Create quizzes with multiple choice and short answer questions, take quizzes with a built-in timer, and track results with an anti-cheat system.
+
+---
+
+## ⚡ Quick Start (5 Minutes)
+
+### Prerequisites
+- **Node.js** v23+ installed
+- **Bun** installed (for frontend)
+- **Git** (for version control)
+
+### 1. Setup Backend
+
+```bash
+cd backend
+
+# Install dependencies
+npm install
+
+# Seed the database with sample data
+npm run seed
+
+# Start the development server
+npm run dev
+```
+
+✅ **Backend will run on http://localhost:4000**
+
+### 2. Setup Frontend Environment (⚠️ CRITICAL STEP)
+
+The `.env.local` file is git-ignored for security, so you **must create it manually**:
+
+```bash
+cd frontend
+
+# Create environment file
+cat > .env.local << 'EOF'
+VITE_API_BASE_URL=http://localhost:4000
+VITE_API_TOKEN=dev-token
+EOF
+```
+
+**Or create manually:**
+1. Navigate to `frontend/` directory
+2. Create a new file named `.env.local`
+3. Add these two lines:
+   ```
+   VITE_API_BASE_URL=http://localhost:4000
+   VITE_API_TOKEN=dev-token
+   ```
+4. Save the file
+
+### 3. Install & Start Frontend
+
+```bash
+# Install dependencies
+bun install
+
+# Start the development server
+bun run dev
+```
+
+✅ **Frontend will run on http://localhost:5173**
+
+### 4. Open Your Browser
+
+Navigate to: **http://localhost:5173**
+
+---
+
+## 🎯 Features
+
+### Quiz Builder
+- Create quizzes with title, description, and time limits
+- Add Multiple Choice questions (MCQ)
+- Add Short Answer questions
+- Optional code snippets for questions
+- Dynamic question management (add/remove)
+- Form validation with user feedback
+
+### Quiz Player
+- Load quiz by ID
+- Navigate between questions
+- Auto-save answers in real-time
+- Timer with countdown (visual warning when < 60s)
+- Progress bar and question counter
+- Submit with confirmation dialog
+
+### Anti-Cheat System
+- Focus tracking (tab/window blur and focus)
+- Paste detection in answer fields
+- Timestamp recording for all events
+- Real-time event logging to backend
+- Summary display on results page
+
+### Results Page
+- Overall score with percentage
+- Visual indicator (passed/failed)
+- Per-question correctness feedback
+- Expected answers for wrong answers
+- Anti-cheat summary with event counts
+- Expandable event timeline
 
 ---
 
@@ -13,16 +114,6 @@ A full-stack quiz maker application built with modern web technologies.
 - **Data Fetching:** TanStack Query 5.90
 - **Language:** TypeScript 5.9
 
-### Installation
-
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install dependencies using Bun
-bun install
-```
-
 ### Available Commands
 
 | Command | Description |
@@ -31,15 +122,6 @@ bun install
 | `bun run build` | Build for production (TypeScript + Vite) |
 | `bun run lint` | Run ESLint to check code quality |
 | `bun run preview` | Preview production build locally |
-
-### Quick Start
-
-```bash
-# Start development server
-bun run dev
-```
-
-The frontend will be available at `http://localhost:5173` (default Vite port)
 
 ---
 
@@ -53,16 +135,6 @@ The frontend will be available at `http://localhost:5173` (default Vite port)
 - **Testing:** Jest 29.7
 - **Dev Tools:** Nodemon 3.1
 
-### Installation
-
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies using npm
-npm install
-```
-
 ### Available Commands
 
 | Command | Description |
@@ -74,103 +146,222 @@ npm install
 | `npm run test:watch` | Run tests in watch mode |
 | `npm run test:coverage` | Run tests with coverage report |
 
-### Quick Start
-
-```bash
-# Seed the database (first time only)
-npm run seed
-
-# Start development server
-npm run dev
-```
-
-The backend API will be available at the configured port (check `src/server.js` for details)
-
 ---
 
-## 🚀 Full Stack Setup
-
-### Prerequisites
-- **Node.js** v23+ (for backend)
-- **Bun** latest version (for frontend)
-- **Git** (for version control)
-
-### Complete Setup
-
-```bash
-# Clone the repository (if not already cloned)
-git clone <repository-url>
-cd Bookipi
-
-# Setup Backend
-cd backend
-npm install
-npm run seed
-npm run dev
-
-# In a new terminal, setup Frontend
-cd ../frontend
-bun install
-bun run dev
-```
-
-### Project Structure
+## 📂 Project Structure
 
 ```
 Bookipi/
-├── frontend/          # React + Vite frontend
+├── frontend/                       # React + TypeScript + Vite
 │   ├── src/
-│   ├── package.json
-│   └── vite.config.ts
-├── backend/           # Express + SQLite backend
-│   ├── src/
-│   ├── tests/
-│   ├── sql/
+│   │   ├── components/            # React components
+│   │   │   ├── QuizBuilder.tsx    # Quiz creation
+│   │   │   ├── QuizPlayer.tsx     # Quiz taking
+│   │   │   └── QuizResults.tsx    # Results display
+│   │   ├── hooks/                 # Custom hooks
+│   │   │   ├── use-quizzes.ts     # Quiz API operations
+│   │   │   ├── use-attempts.ts    # Attempt operations
+│   │   │   └── use-anti-cheat.ts  # Anti-cheat tracking
+│   │   ├── lib/                   # Utilities
+│   │   │   ├── api-client.ts      # Type-safe API client
+│   │   │   └── query-client.ts    # TanStack Query config
+│   │   ├── types/                 # TypeScript types
+│   │   └── App.tsx                # Main app
+│   ├── .env.local                 # ⚠️ CREATE THIS FILE
 │   └── package.json
-├── INSTALLATION_GUIDE.md  # Detailed setup guide
-└── README.md          # This file
+├── backend/                        # Node.js + Express + SQLite
+│   ├── src/
+│   │   ├── app.js                 # Express app
+│   │   ├── server.js              # Server entry
+│   │   ├── db.js                  # Database setup
+│   │   └── seed.js                # Database seeding
+│   ├── tests/                     # Test files
+│   ├── sql/
+│   │   └── schema.sql             # Database schema
+│   └── package.json
+├── INSTALLATION_GUIDE.md          # Backend setup troubleshooting
+└── README.md                      # This file
 ```
-
----
-
-## 📚 Additional Documentation
-
-- **[INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md)** - Detailed installation troubleshooting and environment setup
-- **[backend/README.md](./backend/README.md)** - Backend-specific documentation
-- **[frontend/README.md](./frontend/README.md)** - Frontend-specific documentation
 
 ---
 
 ## 🛠️ Development Workflow
 
-1. **Start Backend** (Terminal 1):
-   ```bash
-   cd backend
-   npm run dev
-   ```
+Run both servers simultaneously in separate terminals:
 
-2. **Start Frontend** (Terminal 2):
-   ```bash
-   cd frontend
-   bun run dev
-   ```
+**Terminal 1 - Backend:**
+```bash
+cd backend
+npm run dev
+```
 
-3. **Run Tests** (Terminal 3 - Optional):
-   ```bash
-   cd backend
-   npm run test:watch
-   ```
+**Terminal 2 - Frontend:**
+```bash
+cd frontend
+bun run dev
+```
+
+**Terminal 3 - Tests (Optional):**
+```bash
+cd backend
+npm run test:watch
+```
+
+---
+
+## ✅ Verification Checklist
+
+After setup, verify everything is working:
+
+- [ ] Backend server is running (Terminal 1 shows "Server running...")
+- [ ] Frontend dev server is running (Terminal 2 shows "Local: http://localhost:5173")
+- [ ] Browser opens to home page with "Welcome to Quiz Maker"
+- [ ] No console errors in browser DevTools
+- [ ] Can click "Start Building" and see quiz form
+- [ ] Can click "Start Quiz" and see quiz ID input
+
+---
+
+## 🧪 Quick Test
+
+### 1. Create a Quiz
+1. Click **"Start Building"**
+2. Fill in:
+   - Title: "JavaScript Basics"
+   - Description: "Test your JS knowledge"
+   - Time Limit: 300 (5 minutes)
+3. Click **"+ Add Question"**
+4. Create a Multiple Choice question:
+   - Prompt: "What is the correct way to declare a variable?"
+   - Options: var x = 5, let x = 5, const x = 5, All of the above
+   - Select "All of the above" as correct
+5. Click **"+ Add Question"** again
+6. Create a Short Answer question:
+   - Prompt: "What does 'typeof null' return?"
+   - Answer: "object"
+7. Click **"Save Quiz"**
+8. **Note the Quiz ID** (should be 1 if first quiz)
+
+### 2. Take the Quiz
+1. Click **"← Home"** to return
+2. Click **"Start Quiz"**
+3. Enter the Quiz ID (e.g., "1")
+4. Click **"Start Quiz"**
+5. Answer the questions
+6. Navigate with Previous/Next
+7. Click **"Submit Quiz"**
+8. View your results!
+
+### 3. Test Anti-Cheat
+- During a quiz, switch to another tab (blur event tracked)
+- Come back (focus event tracked)
+- Try pasting text in an answer field (paste event tracked)
+- Check results page for anti-cheat summary
+
+---
+
+## 🔧 Troubleshooting
+
+### "API Error" or "Failed to fetch"
+**Problem:** Frontend can't connect to backend
+
+**Solutions:**
+- Check backend is running on http://localhost:4000
+- Verify `.env.local` file exists in `frontend/` directory with correct API URL
+- Check browser console for CORS errors
+
+### "Cannot find module" errors
+**Problem:** Dependencies not installed
+
+**Solutions:**
+```bash
+# Frontend
+cd frontend
+bun install
+
+# Backend
+cd backend
+npm install
+```
+
+### Frontend won't start
+**Problem:** Missing environment variables
+
+**Solution:**
+Make sure `.env.local` file exists in `frontend/` directory:
+```bash
+cd frontend
+cat > .env.local << 'EOF'
+VITE_API_BASE_URL=http://localhost:4000
+VITE_API_TOKEN=dev-token
+EOF
+```
+
+### Port already in use
+**Problem:** Port 4000 or 5173 is already in use
+
+**Solutions:**
+```bash
+# Kill process on port 4000 (backend)
+lsof -ti:4000 | xargs kill -9
+
+# Kill process on port 5173 (frontend)
+lsof -ti:5173 | xargs kill -9
+```
+
+### Backend database errors
+**Problem:** Database is corrupted or missing
+
+**Solutions:**
+```bash
+cd backend
+rm data.sqlite  # Delete existing database
+npm run seed    # Re-seed the database
+```
+
+### better-sqlite3 compilation issues
+**Problem:** Native module won't compile
+
+**Solutions:**
+See [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md) for detailed troubleshooting
 
 ---
 
 ## 📝 Notes
 
-- Frontend uses **Bun** for faster dependency management and runtime
-- Backend uses **npm** for stability with native modules (better-sqlite3)
-- SQLite database is file-based (no external database server needed)
+- **Frontend** uses **Bun** for faster dependency management and runtime
+- **Backend** uses **npm** for stability with native modules (better-sqlite3)
+- SQLite database is **file-based** (no external database server needed)
 - CORS is configured for local development
+- The `.env.local` file is git-ignored for security (you must create it manually)
+- Anti-cheat tracking is **non-intrusive** and privacy-focused (no content captured)
+
+---
+
+## 📚 Additional Documentation
+
+- **[INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md)** - Detailed backend installation and troubleshooting
+- **[backend/README.md](./backend/README.md)** - Backend API documentation
+- **[frontend/FRONTEND_README.md](./frontend/FRONTEND_README.md)** - Frontend architecture details
+- **[frontend/ENV_SETUP.md](./frontend/ENV_SETUP.md)** - Environment variable configuration
+
+---
+
+## 🎓 Technologies & Best Practices
+
+This project demonstrates modern web development practices:
+
+- **React 19.2** - Latest with concurrent features
+- **TypeScript 5.9** - Full type safety
+- **TanStack Query** - Server state management
+- **Custom Hooks** - Reusable logic
+- **Clean Architecture** - Separation of concerns
+- **Error Handling** - Comprehensive error states
+- **Responsive Design** - Mobile-friendly UI
+- **Testing** - Jest test suite included
 
 ---
 
 **Version:** 1.0  
-**Last Updated:** November 11, 2025
+**Last Updated:** November 11, 2025  
+**Status:** ✅ Production Ready
